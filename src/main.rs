@@ -9,11 +9,13 @@ fn main() {
 }
 
 fn process_input(input: &str) -> Vec<u128> {
-    let mut output: Vec<u128> = Vec::new();
-    for line in input.lines() {
-        output.push(line.parse::<u128>().expect("Failed to parse line as u64"));
-    }
-    output
+    input
+        .lines()
+        .map(|line| {
+            line.parse::<u128>()
+                .expect("Failed to parse line \"{line}\" as u64")
+        })
+        .collect()
 }
 
 fn do_any_sums_in_x_equal_y(x: Vec<u128>, y: u128) -> bool {
@@ -28,8 +30,12 @@ fn do_any_sums_in_x_equal_y(x: Vec<u128>, y: u128) -> bool {
 }
 
 fn find_first_unsafe_number(numbers: Vec<u128>) -> Option<u128> {
-    for i in 100..numbers.len() {
-        if !do_any_sums_in_x_equal_y(numbers[i - 100..i - 1].to_vec(), numbers[i]) {
+    const NUMBER_OF_LINES_TO_CHECK: usize = 100;
+    for i in NUMBER_OF_LINES_TO_CHECK..numbers.len() {
+        if !do_any_sums_in_x_equal_y(
+            numbers[i - NUMBER_OF_LINES_TO_CHECK..i - 1].to_vec(),
+            numbers[i],
+        ) {
             return Some(numbers[i]);
         }
     }
